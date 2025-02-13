@@ -1,8 +1,8 @@
 import { connect } from 'cloudflare:sockets';
 
 //  配置区块
-let 哎呀呀这是我的ID啊 = "123456"; //实际上这是你的订阅路径，支持任意大小写字母和数字，[域名/ID]进入订阅页面
-let 哎呀呀这是我的VL密钥 = "aa23a45c-cbbc-4dd6-ba51-5be0cc0a62a8"; //这是真实的UUID，通用订阅会进行验证，建议修改为自己的规范化UUID
+let SUB_PATH = "123456"; //实际上这是你的订阅路径，支持任意大小写字母和数字，[域名/ID]进入订阅页面
+let SUB_UUID = "aa23a45c-cbbc-4dd6-ba51-5be0cc0a62a8"; //这是真实的UUID，通用订阅会进行验证，建议修改为自己的规范化UUID
 
 let 私钥开关 = false //是否启用私钥功能，true启用，false不启用，因为私钥功能只支持clash，如果打算使用通用订阅则需关闭私钥功能
 let 咦这是我的私钥哎 = ""; //这是你的私钥，提高隐秘性安全性，就算别人扫到你的域名也无法链接，再也不怕别人薅请求数了^_^
@@ -13,7 +13,7 @@ let 嘲讽语 = "哎呀你找到了我，但是我就是不给你看，气不气
 let 我的优选 = [
   //'www.visa.com',
 ] //格式127.0.0.1:443#US@notls或[2606:4700:3030:0:4563:5696:a36f:cdc5]:2096#US，如果#US不填则使用统一名称，如果@notls不填则默认使用TLS，每行一个，如果不填任何节点会生成一个默认自身域名的小黄云节点
-let 我的优选TXT ='' //优选TXT路径[https://ip.txt]，表达格式与上述相同，使用TXT时脚本内部填写的节点无效，二选一
+let TXT_URL ='' //优选TXT路径[https://ip.txt]，表达格式与上述相同，使用TXT时脚本内部填写的节点无效，二选一
 
 let 启用反代功能 = true //选择是否启用反代功能【总开关】，false，true，现在你可以自由的选择是否启用反代功能了
 let 反代IP = '' //反代IP或域名，反代IP端口一般情况下不用填写，如果你非要用非标反代的话，可以填'ts.hpc.tw:443'这样
@@ -31,21 +31,21 @@ export default {
     const 读取我的请求标头 = 访问请求.headers.get('Upgrade');
     const url = new URL(访问请求.url);
     if (!读取我的请求标头 || 读取我的请求标头 !== 'websocket') {
-      if (我的优选TXT) {
-        const 读取优选文本 = await fetch(我的优选TXT);
+      if (TXT_URL) {
+        const 读取优选文本 = await fetch(TXT_URL);
         const 转换优选文本 = await 读取优选文本.text();
         const 优选节点 = 转换优选文本.split('\n').map(line => line.trim()).filter(line => line);
         我的优选 = 优选节点 || 我的优选
       }
       switch (url.pathname) {
-        case `/${哎呀呀这是我的ID啊}`: {
-          const 订阅页面 = 给我订阅页面(哎呀呀这是我的ID啊, 访问请求.headers.get('Host'));
+        case `/${SUB_PATH}`: {
+          const 订阅页面 = 给我订阅页面(SUB_PATH, 访问请求.headers.get('Host'));
           return new Response(`${订阅页面}`, {
             status: 200,
             headers: { "Content-Type": "text/plain;charset=utf-8" }
           });
         }
-        case `/${哎呀呀这是我的ID啊}/${转码}${转码2}`: {
+        case `/${SUB_PATH}/${转码}${转码2}`: {
           if (隐藏订阅) {
             return new Response (`${嘲讽语}`, {
               status: 200,
@@ -59,7 +59,7 @@ export default {
             });
           }
         }
-        case `/${哎呀呀这是我的ID啊}/${小猫}${咪}`: {
+        case `/${SUB_PATH}/${小猫}${咪}`: {
           if (隐藏订阅) {
             return new Response (`${嘲讽语}`, {
               status: 200,
@@ -115,7 +115,7 @@ function 使用64位加解密(还原混淆字符) {
 }
 //第二步，解读VL协议数据，创建TCP握手
 async function 解析VL标头(VL数据, TCP接口) {
-  if (!私钥开关 && 验证VL的密钥(new Uint8Array(VL数据.slice(1, 17))) !== 哎呀呀这是我的VL密钥) {
+  if (!私钥开关 && 验证VL的密钥(new Uint8Array(VL数据.slice(1, 17))) !== SUB_UUID) {
     return null;
   }
   const 获取数据定位 = new Uint8Array(VL数据)[17];
@@ -277,13 +277,13 @@ if (私钥开关) {
 } else {
   我的私钥 = ""
 }
-function 给我订阅页面(哎呀呀这是我的ID啊, hostName) {
+function 给我订阅页面(SUB_PATH, hostName) {
 return `
 1、本worker的私钥功能只支持${小猫}${咪}，仅open${小猫}${咪}和${小猫}${咪} meta测试过，其他${小猫}${咪}类软件自行测试
 2、若使用通用订阅请关闭私钥功能
 3、其他需求自行研究
-通用的：https${符号}${hostName}/${哎呀呀这是我的ID啊}/${转码}${转码2}
-猫咪的：https${符号}${hostName}/${哎呀呀这是我的ID啊}/${小猫}${咪}
+通用的：https${符号}${hostName}/${SUB_PATH}/${转码}${转码2}
+猫咪的：https${符号}${hostName}/${SUB_PATH}/${小猫}${咪}
 `;
 }
 function 给我通用配置文件(hostName) {
@@ -300,7 +300,7 @@ if (私钥开关) {
     const 端口 =拆分地址端口.length > 1 ? Number(拆分地址端口.pop()) : 443;
     const 地址 = 拆分地址端口.join(":");
     const TLS开关 = tls === 'notls' ? 'security=none' : 'security=tls';
-    return `${转码}${转码2}${符号}${哎呀呀这是我的VL密钥}@${地址}:${端口}?encryption=none&${TLS开关}&sni=${hostName}&type=ws&host=${hostName}&path=%2F%3Fed%3D2560#${节点名字}`;
+    return `${转码}${转码2}${符号}${SUB_UUID}@${地址}:${端口}?encryption=none&${TLS开关}&sni=${hostName}&type=ws&host=${hostName}&path=%2F%3Fed%3D2560#${节点名字}`;
   }).join("\n");
 }
 }
@@ -321,7 +321,7 @@ const 生成节点 = (我的优选) => {
   type: ${转码}${转码2}
   server: ${地址}
   port: ${端口}
-  uuid: ${哎呀呀这是我的VL密钥}
+  uuid: ${SUB_UUID}
   udp: false
   tls: ${TLS开关}
   sni: ${hostName}
