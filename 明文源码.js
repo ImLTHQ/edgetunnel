@@ -45,7 +45,7 @@ export default {
             headers: { "Content-Type": "text/plain;charset=utf-8" }
           });
         }
-        case `/${SUB_PATH}/${转码}${转码2}`: {
+        case `/${SUB_PATH}/v2ray`: {
           if (隐藏订阅) {
             return new Response (`${嘲讽语}`, {
               status: 200,
@@ -59,7 +59,7 @@ export default {
             });
           }
         }
-        case `/${SUB_PATH}/${小猫}${咪}`: {
+        case `/${SUB_PATH}/clash`: {
           if (隐藏订阅) {
             return new Response (`${嘲讽语}`, {
               status: 200,
@@ -271,7 +271,7 @@ async function 获取SOCKS5账号(SOCKS5) {
   return { username, password, hostname, port };
 }
 //////////////////////////////////////////////////////////////////////////订阅页面////////////////////////////////////////////////////////////////////////
-let 转码 = 'vl', 转码2 = 'ess', 符号 = '://', 小猫 = 'cla', 咪 = 'sh', 我的私钥;
+let 我的私钥;
 if (私钥开关) {
   我的私钥 = `my-key: ${咦这是我的私钥哎}`
 } else {
@@ -279,11 +279,8 @@ if (私钥开关) {
 }
 function 给我订阅页面(SUB_PATH, hostName) {
 return `
-1、本worker的私钥功能只支持${小猫}${咪}，仅open${小猫}${咪}和${小猫}${咪} meta测试过，其他${小猫}${咪}类软件自行测试
-2、若使用通用订阅请关闭私钥功能
-3、其他需求自行研究
-通用的：https${符号}${hostName}/${SUB_PATH}/${转码}${转码2}
-猫咪的：https${符号}${hostName}/${SUB_PATH}/${小猫}${咪}
+通用的：https://${hostName}/${SUB_PATH}/v2ray
+猫咪的：https://${hostName}/${SUB_PATH}/clash
 `;
 }
 function 给我通用配置文件(hostName) {
@@ -300,7 +297,7 @@ if (私钥开关) {
     const 端口 =拆分地址端口.length > 1 ? Number(拆分地址端口.pop()) : 443;
     const 地址 = 拆分地址端口.join(":");
     const TLS开关 = tls === 'notls' ? 'security=none' : 'security=tls';
-    return `${转码}${转码2}${符号}${SUB_UUID}@${地址}:${端口}?encryption=none&${TLS开关}&sni=${hostName}&type=ws&host=${hostName}&path=%2F%3Fed%3D2560#${节点名字}`;
+    return `vless://${SUB_UUID}@${地址}:${端口}?encryption=none&${TLS开关}&sni=${hostName}&type=ws&host=${hostName}&path=%2F%3Fed%3D2560#${节点名字}`;
   }).join("\n");
 }
 }
@@ -318,7 +315,7 @@ const 生成节点 = (我的优选) => {
     const TLS开关 = tls === 'notls' ? 'false' : 'true';
   return {
     nodeConfig: `- name: ${节点名字}-${地址}-${端口}
-  type: ${转码}${转码2}
+  type: vless
   server: ${地址}
   port: ${端口}
   uuid: ${SUB_UUID}
