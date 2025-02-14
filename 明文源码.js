@@ -1,7 +1,7 @@
 import { connect } from 'cloudflare:sockets';
 
 //  配置区块
-let SUB_PATH = "123456"; //实际上这是你的订阅路径，支持任意大小写字母和数字，[域名/ID]进入订阅页面
+let SUB_PATH = "sub"; //实际上这是你的订阅路径，支持任意大小写字母和数字，[域名/ID]进入订阅页面
 let SUB_UUID = "aa23a45c-cbbc-4dd6-ba51-5be0cc0a62a8"; //这是真实的UUID，通用订阅会进行验证，建议修改为自己的规范化UUID
 
 let 私钥开关 = false //是否启用私钥功能，true启用，false不启用，因为私钥功能只支持clash，如果打算使用通用订阅则需关闭私钥功能
@@ -22,9 +22,9 @@ let 启用SOCKS5反代 = false //如果启用此功能，原始反代将失效
 let 启用SOCKS5全局反代 = false //选择是否启用SOCKS5全局反代，启用后所有访问都是S5的落地【无论你客户端选什么节点】，访问路径是客户端--CF--SOCKS5，当然启用此功能后延迟=CF+SOCKS5，带宽取决于SOCKS5的带宽，不再享受CF高速和随时满带宽的待遇
 let 我的SOCKS5账号 = '' //格式'账号:密码@地址:端口'
 
-let 我的节点名字 = '天书8.0' //自己的节点名字【统一名称】
+let SUB_NAME = '节点' //自己的节点名字【统一名称】
 
-let 伪装网页 = '' //填入伪装网页，格式'www.youku.com'，建议用小站伪装，比较靠谱
+let 伪装网页 = 'www.baidu.com' //填入伪装网页，格式'www.youku.com'，建议用小站伪装，比较靠谱
 //////////////////////////////////////////////////////////////////////////网页入口////////////////////////////////////////////////////////////////////////
 export default {
   async fetch(访问请求, env) {
@@ -295,7 +295,7 @@ if (私钥开关) {
 }else {
   return 我的优选.map(获取优选 => {
     const [主内容,tls] = 获取优选.split("@");
-    const [地址端口, 节点名字 = 我的节点名字] = 主内容.split("#");
+    const [地址端口, 节点名字 = SUB_NAME] = 主内容.split("#");
     const 拆分地址端口 = 地址端口.split(":");
     const 端口 =拆分地址端口.length > 1 ? Number(拆分地址端口.pop()) : 443;
     const 地址 = 拆分地址端口.join(":");
@@ -311,7 +311,7 @@ if (我的优选.length === 0){
 const 生成节点 = (我的优选) => {
   return 我的优选.map(获取优选 => {
     const [主内容,tls] = 获取优选.split("@");
-    const [地址端口, 节点名字 = 我的节点名字] = 主内容.split("#");
+    const [地址端口, 节点名字 = SUB_NAME] = 主内容.split("#");
     const 拆分地址端口 = 地址端口.split(":");
     const 端口 =拆分地址端口.length > 1 ? Number(拆分地址端口.pop()) : 443;
     const 地址 = 拆分地址端口.join(":").replace(/^\[(.+)\]$/, '$1');
@@ -338,13 +338,6 @@ const 生成节点 = (我的优选) => {
 const 节点配置 = 生成节点(我的优选).map(node => node.nodeConfig).join("\n");
 const 代理配置 = 生成节点(我的优选).map(node => node.proxyConfig).join("\n");
 return `
-dns:
-  nameserver:
-    - 180.76.76.76
-    - 2400:da00::6666
-  fallback:
-    - 8.8.8.8
-    - 2001:4860:4860::8888
 proxies:
 ${节点配置}
 proxy-groups:
@@ -365,22 +358,20 @@ ${代理配置}
   proxies:
     - DIRECT
     - 🚀 节点选择
-rules: # 本人自用规则，不一定适合所有人所有客户端，如客户端因规则问题无法订阅就删除对应规则吧，每个人都有自己习惯的规则，自行研究哦
-# 策略规则，建议使用meta内核，部分规则需打开${小猫}${咪} mate的使用geoip dat版数据库，比如TG规则就需要，或者自定义geoip的规则订阅
-# 这是geoip的规则订阅链接，https://cdn.jsdelivr.net/gh/Loyalsoldier/geoip@release/Country.mmdb
-# - GEOSITE,category-ads-all,REJECT #简单广告过滤规则，要增加规则数可使用category-ads-all
-- GEOSITE,cn,DIRECT #国内域名直连规则
-- GEOIP,CN,DIRECT,no-resolve #国内IP直连规则
-- GEOSITE,cloudflare,DIRECT #CF域名直连规则
-- GEOIP,CLOUDFLARE,DIRECT,no-resolve #CFIP直连规则
-- GEOSITE,gfw,🚀 节点选择 #GFW域名规则
-- GEOSITE,google,🚀 节点选择 #GOOGLE域名规则
-- GEOIP,GOOGLE,🚀 节点选择,no-resolve #GOOGLE IP规则
-- GEOSITE,netflix,🚀 节点选择 #奈飞域名规则
-- GEOIP,NETFLIX,🚀 节点选择,no-resolve #奈飞IP规则
-- GEOSITE,telegram,🚀 节点选择 #TG域名规则
-- GEOIP,TELEGRAM,🚀 节点选择,no-resolve #TG IP规则
-- GEOSITE,openai,🚀 节点选择 #GPT规则
+rules:
+# - GEOSITE,cloudflare,DIRECT
+# - GEOIP,CLOUDFLARE,DIRECT,no-resolve
+- GEOSITE,category-ads-all,REJECT
+- GEOSITE,cn,DIRECT
+- GEOIP,CN,DIRECT,no-resolve
+- GEOSITE,gfw,🚀 节点选择
+- GEOSITE,google,🚀 节点选择
+- GEOIP,GOOGLE,🚀 节点选择,no-resolve
+- GEOSITE,netflix,🚀 节点选择
+- GEOIP,NETFLIX,🚀 节点选择,no-resolve
+- GEOSITE,telegram,🚀 节点选择
+- GEOIP,TELEGRAM,🚀 节点选择,no-resolve
+- GEOSITE,openai,🚀 节点选择
 - MATCH,漏网之鱼
 `
 }
