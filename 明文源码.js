@@ -343,7 +343,7 @@ proxy-groups:
   proxies:
     - ♻️ 自动选择
     - 🔯 故障转移
-  ${代理配置}
+${代理配置}
 - name: 🐟 漏网之鱼
   type: select
   proxies:
@@ -360,7 +360,7 @@ proxy-groups:
   interval: 150
   tolerance: 50
   proxies:
-  ${代理配置}
+${代理配置}
 - name: 🔯 故障转移
   type: fallback
   health-check:
@@ -368,7 +368,7 @@ proxy-groups:
     interval: 300
     url: https://www.google.com/generate_204
   proxies:
-  ${代理配置}
+${代理配置}
 rules:
   - GEOIP,LAN,🎯 全球直连,no-resolve #局域网IP直连规则
   - GEOSITE,cn,🎯 全球直连 #国内域名直连规则
