@@ -370,18 +370,18 @@ ${代理配置}
   proxies:
 ${代理配置}
 rules:
-  - GEOIP,LAN,🎯 全球直连,no-resolve #局域网IP直连规则
-  - GEOSITE,cn,🎯 全球直连 #国内域名直连规则
-  - GEOIP,CN,🎯 全球直连,no-resolve #国内IP直连规则
-  - DOMAIN-SUFFIX,cn,🎯 全球直连 #cn域名直连规则
-  - GEOSITE,gfw,🚀 节点选择 #GFW域名规则
-  - GEOSITE,google,🚀 节点选择 #GOOGLE域名规则
-  - GEOIP,GOOGLE,🚀 节点选择,no-resolve #GOOGLE IP规则
-  - GEOSITE,netflix,🚀 节点选择 #奈飞域名规则
-  - GEOIP,NETFLIX,🚀 节点选择,no-resolve #奈飞IP规则
-  - GEOSITE,telegram,🚀 节点选择 #TG域名规则
-  - GEOIP,TELEGRAM,🚀 节点选择,no-resolve #TG IP规则
-  - GEOSITE,openai,🚀 节点选择 #GPT规则
+  - GEOIP,LAN,🎯 全球直连,no-resolve
+  - GEOSITE,cn,🎯 全球直连
+  - GEOIP,CN,🎯 全球直连,no-resolve
+  - DOMAIN-SUFFIX,cn,🎯 全球直连
+  - GEOSITE,gfw,🚀 节点选择
+  - GEOSITE,google,🚀 节点选择
+  - GEOIP,GOOGLE,🚀 节点选择,no-resolve
+  - GEOSITE,netflix,🚀 节点选择
+  - GEOIP,NETFLIX,🚀 节点选择,no-resolve
+  - GEOSITE,telegram,🚀 节点选择
+  - GEOIP,TELEGRAM,🚀 节点选择,no-resolve
+  - GEOSITE,openai,🚀 节点选择
   - MATCH,🐟 漏网之鱼
 `
 }
