@@ -343,7 +343,7 @@ proxy-groups:
   proxies:
     - ♻️ 自动选择
     - 🔯 故障转移
-    ${代理配置}
+  ${代理配置}
 - name: 🐟 漏网之鱼
   type: select
   proxies:
