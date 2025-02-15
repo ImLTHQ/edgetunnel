@@ -4,9 +4,6 @@ import { connect } from 'cloudflare:sockets';
 let SUB_PATH = 'sub';
 let SUB_UUID = 'aa23a45c-cbbc-4dd6-ba51-5be0cc0a62a8'
 
-let 私钥开关 = false
-let 咦这是我的私钥哎 = ''
-
 let 隐藏订阅 = false
 let 嘲讽语 = '哎呀你找到了我，但是我就是不给你看，气不气，嘿嘿嘿'
 
@@ -37,7 +34,7 @@ export default {
       }
       switch (url.pathname) {
         case `/${SUB_PATH}`: {
-          const 订阅页面 = 给我订阅页面(SUB_PATH, 访问请求.headers.get('Host'));
+          const 订阅页面 = SUB_PAGE(SUB_PATH, 访问请求.headers.get('Host'));
           return new Response(`${订阅页面}`, {
             status: 200,
             headers: { "Content-Type": "text/plain;charset=utf-8" }
@@ -82,14 +79,7 @@ export default {
       我的SOCKS5账号 = env.SOCKS5 || 我的SOCKS5账号;
       启用SOCKS5反代 = (env.SOCKS5OPEN === 'true') ? true : (env.SOCKS5OPEN === 'false' ? false : 启用SOCKS5反代);
       启用SOCKS5全局反代 = (env.SOCKS5GLOBAL === 'true') ? true : (env.SOCKS5GLOBAL === 'false' ? false : 启用SOCKS5全局反代);
-      if (私钥开关) {
-        const 验证我的私钥 = 访问请求.headers.get('my-key')
-        if (验证我的私钥 === 咦这是我的私钥哎) {
-          return await 升级WS请求(访问请求);
-        }
-      } else {
-        return await 升级WS请求(访问请求);
-      }
+      return await 升级WS请求(访问请求);
     }
   }
 };
@@ -113,7 +103,7 @@ function 使用64位加解密(还原混淆字符) {
 }
 //  第二步，解读VL协议数据，创建TCP握手
 async function 解析VL标头(VL数据, TCP接口) {
-  if (!私钥开关 && 验证VL的密钥(new Uint8Array(VL数据.slice(1, 17))) !== SUB_UUID) {
+  if (验证VL的密钥(new Uint8Array(VL数据.slice(1, 17))) !== SUB_UUID) {
     return null;
   }
   const 获取数据定位 = new Uint8Array(VL数据)[17];
@@ -269,13 +259,7 @@ async function 获取SOCKS5账号(SOCKS5) {
   return { username, password, hostname, port };
 }
 //  订阅页面
-let 我的私钥;
-if (私钥开关) {
-  我的私钥 = `my-key: ${咦这是我的私钥哎}`
-} else {
-  我的私钥 = ""
-}
-function 给我订阅页面(SUB_PATH, hostName) {
+function SUB_PAGE(SUB_PATH, hostName) {
 return `
 v2ray的：https://${hostName}/${SUB_PATH}/v2ray
 clash的：https://${hostName}/${SUB_PATH}/clash
@@ -285,9 +269,6 @@ function 给我通用配置文件(hostName) {
 if (我的优选.length === 0){
   我的优选 = [`${hostName}:443`]
 }
-if (私钥开关) {
-  return `请先关闭私钥功能`
-}else {
   return 我的优选.map(获取优选 => {
     const [主内容,tls] = 获取优选.split("@");
     const [地址端口, 节点名字 = SUB_NAME] = 主内容.split("#");
@@ -297,7 +278,6 @@ if (私钥开关) {
     const TLS开关 = tls === 'notls' ? 'security=none' : 'security=tls';
     return `vless://${SUB_UUID}@${地址}:${端口}?encryption=none&${TLS开关}&sni=${hostName}&type=ws&host=${hostName}&path=%2F%3Fed%3D2560#${节点名字}`;
   }).join("\n");
-}
 }
 function 给我小猫咪配置文件(hostName) {
 if (我的优选.length === 0){
@@ -324,8 +304,7 @@ const 生成节点 = (我的优选) => {
   ws-opts:
     path: "/?ed=2560"
     headers:
-      Host: ${hostName}
-      ${我的私钥}`,
+      Host: ${hostName}`,
     proxyConfig: `    - ${节点名字}-${地址}-${端口}`
     };
   });
