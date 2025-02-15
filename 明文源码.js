@@ -1,11 +1,11 @@
 import { connect } from 'cloudflare:sockets';
 
 //  配置区块
-let SUB_PATH = "sub"; //实际上这是你的订阅路径，支持任意大小写字母和数字，[域名/ID]进入订阅页面
-let SUB_UUID = "aa23a45c-cbbc-4dd6-ba51-5be0cc0a62a8"; //这是真实的UUID，通用订阅会进行验证，建议修改为自己的规范化UUID
+let SUB_PATH = 'sub'; //实际上这是你的订阅路径，支持任意大小写字母和数字，[域名/ID]进入订阅页面
+let SUB_UUID = 'aa23a45c-cbbc-4dd6-ba51-5be0cc0a62a8'; //这是真实的UUID，通用订阅会进行验证，建议修改为自己的规范化UUID
 
 let 私钥开关 = false //是否启用私钥功能，true启用，false不启用，因为私钥功能只支持clash，如果打算使用通用订阅则需关闭私钥功能
-let 咦这是我的私钥哎 = ""; //这是你的私钥，提高隐秘性安全性，就算别人扫到你的域名也无法链接，再也不怕别人薅请求数了^_^
+let 咦这是我的私钥哎 = '' //这是你的私钥，提高隐秘性安全性，就算别人扫到你的域名也无法链接，再也不怕别人薅请求数了^_^
 
 let 隐藏订阅 = false //选择是否隐藏订阅页面，false不隐藏，true隐藏，当然隐藏后自己也无法订阅，因为配置固定，适合自己订阅后就隐藏，防止被爬订阅，并且可以到下方添加嘲讽语^_^
 let 嘲讽语 = "哎呀你找到了我，但是我就是不给你看，气不气，嘿嘿嘿" //隐藏订阅后，真实的订阅页面就会显示这段话，想写啥写啥
@@ -16,7 +16,7 @@ let 我的优选 = [
 let TXT_URL ='' //优选TXT路径[https://ip.txt]，表达格式与上述相同，使用TXT时脚本内部填写的节点无效，二选一
 
 let 启用反代功能 = true //选择是否启用反代功能【总开关】，false，true，现在你可以自由的选择是否启用反代功能了
-let 反代IP = '' //反代IP或域名，反代IP端口一般情况下不用填写，如果你非要用非标反代的话，可以填'ts.hpc.tw:443'这样
+let 反代IP = 'ts.hpc.tw:443' //反代IP或域名，反代IP端口一般情况下不用填写，如果你非要用非标反代的话，可以填'ts.hpc.tw:443'这样
 
 let 启用SOCKS5反代 = false //如果启用此功能，原始反代将失效
 let 启用SOCKS5全局反代 = false //选择是否启用SOCKS5全局反代，启用后所有访问都是S5的落地【无论你客户端选什么节点】，访问路径是客户端--CF--SOCKS5，当然启用此功能后延迟=CF+SOCKS5，带宽取决于SOCKS5的带宽，不再享受CF高速和随时满带宽的待遇
@@ -279,8 +279,8 @@ if (私钥开关) {
 }
 function 给我订阅页面(SUB_PATH, hostName) {
 return `
-通用的：https://${hostName}/${SUB_PATH}/v2ray
-猫咪的：https://${hostName}/${SUB_PATH}/clash
+v2ray的：https://${hostName}/${SUB_PATH}/v2ray
+clash的：https://${hostName}/${SUB_PATH}/clash
 `;
 }
 function 给我通用配置文件(hostName) {
