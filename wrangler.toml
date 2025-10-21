@@ -1,4 +1,4 @@
-main = "_worker.js"
+name = "et"main = "_worker.js"
 compatibility_date = "2025-10-01"
 
 [vars]
